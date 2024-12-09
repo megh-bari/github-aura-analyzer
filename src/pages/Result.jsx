@@ -148,15 +148,6 @@ const Result = () => {
     );
     const forkRatio = repos.filter((repo) => repo.fork).length / repos.length;
 
-    // Special case for absolute beginners with minimal activity
-    if (followers <= 2 && public_repos <= 1) {
-      return {
-        type: "Noob",
-        description: "You need to work hard, LFG!",
-        color: "bg-gradient-to-r from-gray-500 to-red-500",
-      };
-    }
-
     // Comprehensive Aura Categorization
     const auraCategories = [
       {
@@ -246,6 +237,12 @@ const Result = () => {
           "A passionate beginner taking their first steps in the world of technology.",
         color: "bg-gradient-to-r from-gray-700 to-black",
         pointMultiplier: 0.4,
+      },
+      {
+        range: { min: 0, max: 2 },
+        type: "Noob",
+        description: "You need to work hard, LFG!",
+        color: "bg-gradient-to-r from-gray-500 to-red-500",
       },
     ];
 
