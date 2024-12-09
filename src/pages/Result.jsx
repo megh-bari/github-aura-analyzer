@@ -292,6 +292,9 @@ const calculateAuraPoints = (profile, repos) => {
       window.open(url, "_blank");
     }
   };
+
+
+  
   const fetchProfileData = async () => {
     const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
     const headers = GITHUB_TOKEN
@@ -327,18 +330,25 @@ const calculateAuraPoints = (profile, repos) => {
         !contributionsResponse.ok ||
         !yearContributionsResponse.ok
       ) {
-        // Check for rate limit
-        const rateLimitRemaining = userResponse.headers.get("X-RateLimit-Remaining");
-        if (rateLimitRemaining === "0") {
-          const rateLimitReset = userResponse.headers.get("X-RateLimit-Reset");
-          const resetTime = new Date(rateLimitReset * 1000).toLocaleString();
+        if (userResponse.status === 401) {
           throw new Error(
-            `GitHub API rate limit reached. Please try again after ${resetTime}`
+            "Invalid GitHub API token or insufficient permissions. Please check your token and try again."
           );
         } else {
-          throw new Error("Failed to fetch GitHub profile");
+          // Check for rate limit
+          const rateLimitRemaining = userResponse.headers.get("X-RateLimit-Remaining");
+          if (rateLimitRemaining === "0") {
+            const rateLimitReset = userResponse.headers.get("X-RateLimit-Reset");
+            const resetTime = new Date(rateLimitReset * 1000).toLocaleString();
+            throw new Error(
+              `GitHub API rate limit reached. Please try again after ${resetTime}`
+            );
+          } else {
+            throw new Error("Failed to fetch GitHub profile");
+          }
         }
       }
+  
   
       const userData = await userResponse.json();
       const reposData = await reposResponse.json();
