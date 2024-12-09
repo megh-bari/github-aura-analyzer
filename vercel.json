@@ -2,23 +2,19 @@
   "version": 2,
   "builds": [
     {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
       "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "use": "@vercel/node",
+      "config": { "maxLambdaSize": "50mb" }
     }
   ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "headers": [
+  "routes": [
     {
-      "source": "/assets/(.*)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript"
-        }
-      ]
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
     }
   ]
 }
