@@ -1,8 +1,22 @@
-# React + Vite
+# GitHub Aura Analyzer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**GitHub Aura Analyzer** is a sleek web application designed to provide detailed insights into your GitHub profile. With this application, you can analyze your repository contributions, follower activity, and overall profile presence through an intuitive and visually appealing interface.
 
-Currently, two official plugins are available:
+## 🚀 Features
+- **Contribution Insights**: Visualize your activity across repositories.
+- **Follower Analysis**: Track follower activity and interactions.
+- **Intuitive Interface**: Simple, clean, and responsive design.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Visit  
+Check out the live application here: **[GitHub Aura Analyzer](https://github-aura-analyzer.vercel.app/)**  
+
+## 🖼️ Screenshots  
+
+![Home](./src/assets/screenshots/github_aura_home.png)  
+![Result](./src/assets/screenshots/github_aura_result.png)  
+
+## 📜 License  
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+
+## Happy Coding 🎈
