@@ -567,7 +567,7 @@ const calculateAuraPoints = (profile, repos) => {
           ref={profileCardRef}
           className="bg-gray-900/90 backdrop-blur-xl border-2 border-transparent hover:border-purple-600/50 transition-all duration-300 ease-in-out shadow-2xl rounded-2xl overflow-hidden"
         >
-          <CardHeader className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 text-center p-6">
+          {/* <CardHeader className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 text-center p-6">
             <div className="relative mb-4">
               <img
                 src={profile?.avatar_url}
@@ -635,8 +635,76 @@ const calculateAuraPoints = (profile, repos) => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
+<CardHeader className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 text-center p-6">
+        <div className="relative mb-4">
+          <img
+            src={profile?.avatar_url}
+            alt={profile?.name}
+            className="w-32 h-32 rounded-full border-4 border-purple-500/70 shadow-2xl mx-auto"
+          />
+          <div className="absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2">
+            <Badge className="bg-yellow-500 text-white px-4 py-2 rounded-full text-xs shadow-lg flex items-center justify-center space-x-2">
+              <Award className="mr-2 w-4 h-4" /> 
+              {auraPoints} Aura Points
+            </Badge>
+          </div>
+        </div>
 
+        <CardTitle className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500 mb-2">
+          {profile?.name || profile?.login}
+          <div className="text-gray-400 text-lg mt-1">
+            @{profile?.login}
+          </div>
+        </CardTitle>
+
+        <p className="text-gray-300 text-base max-w-xl mx-auto">
+          {profile?.bio || "No bio available"}
+        </p>
+
+        <Badge
+          variant="outline"
+          className={`mt-4 ${aura.color} text-white text-sm px-4 py-2 rounded-full border-2 border-white/30`}
+        >
+          {aura.type} Aura
+        </Badge>
+      </CardHeader>
+
+      <CardContent className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            {
+              icon: <Users className="w-5 h-5 text-purple-400" />,
+              label: "Followers",
+              value: profile?.followers,
+            },
+            {
+              icon: <BookOpen className="w-5 h-5 text-purple-400" />,
+              label: "Repositories",
+              value: profile?.public_repos,
+            },
+            {
+              icon: <Star className="w-5 h-5 text-yellow-400" />,
+              label: "Total Stars",
+              value: totalStars,
+            },
+          ].map((stat, index) => (
+            <div
+              key={index}
+              className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-purple-500/20 hover:border-purple-500/50 transition-all cursor-pointer"
+            >
+              <div className="flex items-center justify-center mb-2">
+                {stat.icon}
+              </div>
+              <div className="text-2xl font-bold text-white text-center">
+                {stat.value?.toLocaleString()}
+              </div>
+              <div className="text-sm text-gray-400 text-center">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
             <Card className="bg-gray-800/60 backdrop-blur-sm border border-purple-500/30 rounded-xl hover:border-purple-500/50 cursor-pointer">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500 mb-3">
