@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-     "vercel-build": "npm run build"
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
