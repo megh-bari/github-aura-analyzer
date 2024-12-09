@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -11,10 +11,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Github, Zap, Sparkles, ExternalLink, Twitter } from "lucide-react";
+import LoadingScreen from "./LoadingScreen"; // Add this import at the top
 
 const Home = () => {
   const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // Add this state
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // This will handle the initial loading state
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500); 
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleAnalyze = () => {
     if (username.trim()) {
@@ -28,6 +39,12 @@ const Home = () => {
     }
   };
 
+  // Show loading screen while loading
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  // Rest of your component remains exactly the same
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black relative">
       {/* Built by tag */}
@@ -43,6 +60,7 @@ const Home = () => {
         </a>
       </div>
 
+      {/* Rest of your existing JSX */}
       {/* Header - Always horizontal navbar */}
       <header className="p-3 sm:p-6 max-w-7xl mx-auto">
         <nav className="flex justify-between items-center">
