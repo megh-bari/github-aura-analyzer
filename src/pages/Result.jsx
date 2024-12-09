@@ -280,65 +280,6 @@ const calculateAuraPoints = (profile, repos) => {
   return Math.min(Math.round(points), 10_000);
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // const downloadProfileImage = async () => {
-  //   if (profileCardRef.current) {
-  //     try {
-  //       toast.loading("Generating image...");
-
-  //       const canvas = await html2canvas(profileCardRef.current, {
-  //         scale: 2,
-  //         useCORS: true,
-  //         backgroundColor: "#fff",
-  //         logging: false,
-  //         windowWidth: profileCardRef.current.scrollWidth,
-  //         windowHeight: profileCardRef.current.scrollHeight,
-  //         allowTaint: true,
-  //       });
-
-  //       const tempCanvas = document.createElement("canvas");
-  //       const ctx = tempCanvas.getContext("2d");
-  //       const padding = 40;
-
-  //       tempCanvas.width = canvas.width + padding * 2;
-  //       tempCanvas.height = canvas.height + padding * 2;
-
-  //       ctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height); // Clear any previous fill
-  //       ctx.fillStyle = "white"; // Add background fill if needed
-  //       ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-  //       ctx.drawImage(canvas, padding, padding);
-
-  //       const link = document.createElement("a");
-  //       link.download = `${username}_github_aura.png`;
-  //       link.href = tempCanvas.toDataURL("image/png");
-  //       link.click();
-
-  //       toast.dismiss();
-  //       toast.success("Profile image downloaded successfully!");
-  //     } catch (error) {
-  //       console.error("Error downloading image:", error);
-  //       toast.error("Failed to download profile image");
-  //     }
-  //   }
-  // };
-
   const shareOnTwitter = () => {
     if (profile) {
       const auraPoints = calculateAuraPoints(profile, repos);
@@ -351,7 +292,6 @@ const calculateAuraPoints = (profile, repos) => {
       window.open(url, "_blank");
     }
   };
-
   const fetchProfileData = async () => {
     const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN;
     const headers = GITHUB_TOKEN
@@ -362,7 +302,7 @@ const calculateAuraPoints = (profile, repos) => {
       : {
           Accept: "application/vnd.github.v3+json",
         };
-
+  
     try {
       const [
         userResponse,
@@ -380,53 +320,62 @@ const calculateAuraPoints = (profile, repos) => {
           headers,
         }),
       ]);
-
+  
       if (
         !userResponse.ok ||
         !reposResponse.ok ||
         !contributionsResponse.ok ||
         !yearContributionsResponse.ok
       ) {
-        throw new Error("Failed to fetch GitHub profile");
+        // Check for rate limit
+        const rateLimitRemaining = userResponse.headers.get("X-RateLimit-Remaining");
+        if (rateLimitRemaining === "0") {
+          const rateLimitReset = userResponse.headers.get("X-RateLimit-Reset");
+          const resetTime = new Date(rateLimitReset * 1000).toLocaleString();
+          throw new Error(
+            `GitHub API rate limit reached. Please try again after ${resetTime}`
+          );
+        } else {
+          throw new Error("Failed to fetch GitHub profile");
+        }
       }
-
+  
       const userData = await userResponse.json();
       const reposData = await reposResponse.json();
       const contributionsData = await contributionsResponse.json();
       const yearContributionsData = await yearContributionsResponse.json();
-
+  
       const totalStarsCount = reposData.reduce(
         (sum, repo) => sum + repo.stargazers_count,
         0
       );
       setTotalStars(totalStarsCount);
-
+  
       const totalContributions = contributionsData.filter(
-        (event) =>
-          event.type === "PushEvent" || event.type === "PullRequestEvent"
+        (event) => event.type === "PushEvent" || event.type === "PullRequestEvent"
       ).length;
-
+  
       const yearTotalContributions = yearContributionsData.filter((event) => {
         const eventDate = new Date(event.created_at);
         const oneYearAgo = new Date();
         oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-
+  
         return (
           (event.type === "PushEvent" || event.type === "PullRequestEvent") &&
           eventDate >= oneYearAgo
         );
       }).length;
-
+  
       setContributions({
         total: totalContributions,
         yearTotal: yearTotalContributions,
       });
-
+  
       const completeProfile = {
         ...userData,
         aura: determineAura(userData, reposData),
       };
-
+  
       setProfile(completeProfile);
       setRepos(reposData);
       setLoading(false);
@@ -434,12 +383,10 @@ const calculateAuraPoints = (profile, repos) => {
       console.error("Error fetching profile:", error);
       setError(error.message);
       setLoading(false);
-      toast.error(
-        "Failed to fetch GitHub profile. Check username or try again."
-      );
+      toast.error(error.message);
     }
   };
-
+  
   useEffect(() => {
     setProfile(null);
     setRepos([]);
