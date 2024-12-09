@@ -142,6 +142,18 @@ const Result = () => {
   // new
   const determineAura = (profile, repos) => {
     const { followers, public_repos, bio } = profile;
+
+// Special case for users with 0-2 followers or zero repositories
+if (followers <= 2 || repos.length === 0) {
+  return {
+      type: "Noob",
+      description: "You need to work hard, LFG!",
+      color: "bg-gradient-to-r from-gray-500 to-red-500",
+      auraAnalysis: "You need to grind",
+      pointMultiplier: 0.1
+  };
+}
+
     const totalStars = repos.reduce(
       (sum, repo) => sum + repo.stargazers_count,
       0
