@@ -34,111 +34,317 @@ const Result = () => {
   const profileCardRef = useRef(null);
 
   const determineAura = (profile, repos) => {
-    const { followers, public_repos, bio } = profile;
-    const totalStars = repos.reduce(
-      (sum, repo) => sum + repo.stargazers_count,
-      0
-    );
-    const forkRatio = repos.filter((repo) => repo.fork).length / repos.length;
+  const { followers, public_repos, bio, created_at, login } = profile;
+  const totalStars = repos.reduce(
+    (sum, repo) => sum + repo.stargazers_count,
+    0
+  );
+  const forkRatio = repos.filter((repo) => repo.fork).length / repos.length;
+  const totalWatchers = repos.reduce(
+    (sum, repo) => sum + repo.watchers_count,
+    0
+  );
+  const hasPopularRepo = repos.some(repo => repo.stargazers_count > 1000);
+  const accountAge = new Date().getFullYear() - new Date(created_at).getFullYear();
+  
+  // Calculate language distribution
+  const languageStats = repos.reduce((acc, repo) => {
+    if (repo.language) {
+      acc[repo.language] = (acc[repo.language] || 0) + 1;
+    }
+    return acc;
+  }, {});
+  const primaryLanguage = Object.entries(languageStats)
+    .sort(([,a], [,b]) => b - a)[0]?.[0];
 
-    if (followers > 10000 && totalStars > 5000) {
+  // Calculate commit frequency (approximation based on repo update dates)
+  const activeRepos = repos.filter(repo => 
+    new Date(repo.updated_at) > new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
+  ).length;
+
+  // Legendary Tier (100k+ followers)
+  if (followers > 100000) {
+    if (totalStars > 100000) {
       return {
-        type: "Global Tech Icon",
-        description:
-          "An unparalleled leader in the tech world with immense influence.",
-        color: "bg-gradient-to-r from-red-600 to-yellow-600",
+        type: "Tech Luminary",
+        description: "A transcendent figure whose work has revolutionized the tech industry.",
+        color: "bg-gradient-to-r from-yellow-300 via-purple-600 to-red-700",
+        tier: "legendary",
       };
     }
+    return {
+      type: "Tech Icon",
+      description: "An inspirational leader with global influence in technology.",
+      color: "bg-gradient-to-r from-yellow-400 via-red-500 to-purple-600",
+      tier: "legendary",
+    };
+  }
 
-    if (followers > 5000 && totalStars > 1000) {
+  // Elite Tier (50k-100k followers)
+  if (followers > 50000) {
+    if (totalStars > 50000) {
       return {
-        type: "Tech Influencer",
-        description:
-          "A highly recognized developer with massive community impact and thought leadership.",
-        color: "bg-gradient-to-r from-blue-600 to-purple-600",
+        type: "Tech Virtuoso",
+        description: "A masterful developer whose innovations shape the future of technology.",
+        color: "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500",
+        tier: "elite",
       };
     }
+    return {
+      type: "Tech Maestro",
+      description: "A distinguished leader with extraordinary impact on the developer community.",
+      color: "bg-gradient-to-r from-indigo-600 via-purple-500 to-pink-500",
+      tier: "elite",
+    };
+  }
 
-    if (followers > 1000 && totalStars > 500) {
+  // Master Tier (10k-50k followers)
+  if (followers > 10000) {
+    if (totalStars > 25000) {
       return {
-        type: "Rising Star",
-        description: "A rapidly growing developer with increasing influence.",
-        color: "bg-gradient-to-r from-orange-600 to-red-600",
+        type: "Tech Maven",
+        description: "A visionary developer whose work inspires countless others.",
+        color: "bg-gradient-to-r from-red-600 via-orange-500 to-yellow-500",
+        tier: "master",
       };
     }
-
-    if (followers > 500 && followers <= 1000) {
+    if (hasPopularRepo) {
       return {
-        type: "Growing Contributor",
-        description:
-          "A developer with a growing impact and a steadily increasing follower base.",
-        color: "bg-gradient-to-r from-green-600 to-teal-500",
+        type: "Innovation Leader",
+        description: "A pioneering developer known for groundbreaking projects.",
+        color: "bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500",
+        tier: "master",
       };
     }
+    return {
+      type: "Community Leader",
+      description: "A respected figure with significant influence in tech communities.",
+      color: "bg-gradient-to-r from-green-600 via-teal-500 to-blue-500",
+      tier: "master",
+    };
+  }
 
-    if (followers > 50 && followers <= 500) {
+  // Expert Tier (5k-10k followers)
+  if (followers > 5000) {
+    if (totalStars > 10000) {
       return {
-        type: "Budding Developer",
-        description:
-          "An emerging developer with potential for significant growth.",
-        color: "bg-gradient-to-r from-indigo-600 to-pink-500",
+        type: "Tech Innovator",
+        description: "A creative force driving technological advancement.",
+        color: "bg-gradient-to-r from-purple-600 via-pink-500 to-red-500",
+        tier: "expert",
       };
     }
-
-    if (
-      bio &&
-      (bio.toLowerCase().includes("open source") ||
-        bio.toLowerCase().includes("contributor"))
-    ) {
+    if (activeRepos > 10) {
       return {
-        type: "Community Builder",
-        description:
-          "Passionate about collaborative development and knowledge sharing.",
-        color: "bg-gradient-to-r from-green-600 to-teal-500",
+        type: "Active Mentor",
+        description: "A dedicated developer fostering growth in the community.",
+        color: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
+        tier: "expert",
       };
     }
+    return {
+      type: "Tech Authority",
+      description: "An established expert with proven expertise and influence.",
+      color: "bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500",
+      tier: "expert",
+    };
+  }
 
-    if (public_repos > 50 && totalStars > 500) {
+  // Advanced Tier (2k-5k followers)
+  if (followers > 2000) {
+    if (totalStars > 5000) {
       return {
-        type: "Prolific Creator",
-        description:
-          "A consistently productive developer with a diverse and impactful portfolio.",
-        color: "bg-gradient-to-r from-indigo-600 to-pink-500",
+        type: "Rising Innovator",
+        description: "An emerging tech leader with innovative contributions.",
+        color: "bg-gradient-to-r from-orange-500 via-red-500 to-pink-500",
+        tier: "advanced",
       };
     }
+    if (public_repos > 100) {
+      return {
+        type: "Prolific Builder",
+        description: "A highly productive developer with diverse project experience.",
+        color: "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500",
+        tier: "advanced",
+      };
+    }
+    return {
+      type: "Community Catalyst",
+      description: "A developer accelerating community growth and collaboration.",
+      color: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
+      tier: "advanced",
+    };
+  }
 
+  // Established Tier (1k-2k followers)
+  if (followers > 1000) {
+    if (totalStars > 2000) {
+      return {
+        type: "Project Virtuoso",
+        description: "A skilled developer known for high-quality projects.",
+        color: "bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500",
+        tier: "established",
+      };
+    }
     if (forkRatio > 0.5) {
       return {
-        type: "Collaborative Innovator",
-        description:
-          "Skilled at building upon and improving existing projects.",
-        color: "bg-gradient-to-r from-yellow-600 to-orange-500",
+        type: "Collaboration Expert",
+        description: "A developer excelling in collaborative development.",
+        color: "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500",
+        tier: "established",
       };
     }
-
     return {
-      type: "Aspiring Developer",
-      description:
-        "A developer at the beginning of their journey, ready to learn and grow.",
-      color: "bg-gradient-to-r from-gray-500 to-black-500",
+      type: "Respected Developer",
+      description: "A developer with proven expertise and growing influence.",
+      color: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
+      tier: "established",
     };
+  }
+
+  // Growing Tier (500-1k followers)
+  if (followers > 500) {
+    if (activeRepos > 5) {
+      return {
+        type: "Active Innovator",
+        description: "A consistently contributing developer with growing impact.",
+        color: "bg-gradient-to-r from-orange-500 via-red-500 to-pink-500",
+        tier: "growing",
+      };
+    }
+    if (public_repos > 50) {
+      return {
+        type: "Project Explorer",
+        description: "A curious developer with diverse technical interests.",
+        color: "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500",
+        tier: "growing",
+      };
+    }
+    return {
+      type: "Rising Developer",
+      description: "A developer steadily building their reputation.",
+      color: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
+      tier: "growing",
+    };
+  }
+
+  // Active Tier (100-500 followers)
+  if (followers > 100) {
+    if (totalStars > 500) {
+      return {
+        type: "Emerging Creator",
+        description: "A promising developer with notable project success.",
+        color: "bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500",
+        tier: "active",
+      };
+    }
+    if (accountAge > 3) {
+      return {
+        type: "Seasoned Contributor",
+        description: "A consistent long-term contributor to the community.",
+        color: "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500",
+        tier: "active",
+      };
+    }
+    return {
+      type: "Active Builder",
+      description: "An engaged developer actively growing their skills.",
+      color: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
+      tier: "active",
+    };
+  }
+
+  // Special Categories
+  if (public_repos > 100 && totalStars > 1000) {
+    return {
+      type: "Project Maestro",
+      description: "A developer with an impressive portfolio of valuable projects.",
+      color: "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500",
+      tier: "special",
+    };
+  }
+
+  if (forkRatio > 0.7 && public_repos > 30) {
+    return {
+      type: "Open Source Advocate",
+      description: "A developer dedicated to collaborative improvement.",
+      color: "bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500",
+      tier: "special",
+    };
+  }
+
+  // Language Specialist Categories
+  if (primaryLanguage && public_repos > 20) {
+    return {
+      type: `${primaryLanguage} Specialist`,
+      description: `A focused developer with expertise in ${primaryLanguage}.`,
+      color: "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500",
+      tier: "specialist",
+    };
+  }
+
+  // Emerging Tier (default)
+  if (accountAge < 1) {
+    return {
+      type: "Fresh Explorer",
+      description: "A newcomer embarking on their development journey.",
+      color: "bg-gradient-to-r from-gray-500 via-slate-500 to-gray-600",
+      tier: "emerging",
+    };
+  }
+
+  return {
+    type: "Code Explorer",
+    description: "A developer discovering their path in the tech world.",
+    color: "bg-gradient-to-r from-gray-500 via-slate-500 to-gray-600",
+    tier: "emerging",
   };
+};
 
-  const calculateAuraPoints = (profile, repos) => {
-    const { followers, public_repos } = profile;
-    const totalStars = repos.reduce(
-      (sum, repo) => sum + repo.stargazers_count,
-      0
-    );
+const calculateAuraPoints = (profile, repos) => {
+  const { followers, public_repos, created_at } = profile;
+  const totalStars = repos.reduce(
+    (sum, repo) => sum + repo.stargazers_count,
+    0
+  );
+  const totalWatchers = repos.reduce(
+    (sum, repo) => sum + repo.watchers_count,
+    0
+  );
+  const accountAge = new Date().getFullYear() - new Date(created_at).getFullYear();
+  const activeRepos = repos.filter(repo => 
+    new Date(repo.updated_at) > new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
+  ).length;
 
-    let points = 0;
-    points += Math.min(followers, 5000) / 50;
-    points += totalStars;
-    points += public_repos * 2;
+  let points = 0;
+  
+  // Follower points (max 400 points)
+  points += Math.min(followers, 100000) / 250;
+  
+  // Stars points (max 300 points)
+  points += Math.min(totalStars, 50000) / 167;
+  
+  // Repository points (max 100 points)
+  points += Math.min(public_repos, 500) * 0.2;
+  
+  // Watchers points (max 50 points)
+  points += Math.min(totalWatchers, 10000) / 200;
+  
+  // Active repos bonus (max 50 points)
+  points += activeRepos * 2;
+  
+  // Account age bonus (max 50 points)
+  points += Math.min(accountAge * 5, 50);
 
-    return Math.min(Math.round(points), 1000);
-  };
+  // Exceptional achievements bonuses
+  if (followers > 50000) points += 100;
+  if (totalStars > 25000) points += 100;
+  if (public_repos > 300) points += 50;
+  if (activeRepos > 20) points += 50;
+  if (totalWatchers > 5000) points += 50;
 
+  return Math.min(Math.round(points), 1000);
+};
   // const downloadProfileImage = async () => {
   //   if (profileCardRef.current) {
   //     try {
