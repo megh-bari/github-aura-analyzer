@@ -44,7 +44,8 @@ const Result = () => {
     if (followers > 10000 && totalStars > 5000) {
       return {
         type: "Global Tech Icon",
-        description: "An unparalleled leader in the tech world with immense influence.",
+        description:
+          "An unparalleled leader in the tech world with immense influence.",
         color: "bg-gradient-to-r from-red-600 to-yellow-600",
       };
     }
@@ -52,7 +53,8 @@ const Result = () => {
     if (followers > 5000 && totalStars > 1000) {
       return {
         type: "Tech Influencer",
-        description: "A highly recognized developer with massive community impact and thought leadership.",
+        description:
+          "A highly recognized developer with massive community impact and thought leadership.",
         color: "bg-gradient-to-r from-blue-600 to-purple-600",
       };
     }
@@ -68,7 +70,8 @@ const Result = () => {
     if (followers > 500 && followers <= 1000) {
       return {
         type: "Growing Contributor",
-        description: "A developer with a growing impact and a steadily increasing follower base.",
+        description:
+          "A developer with a growing impact and a steadily increasing follower base.",
         color: "bg-gradient-to-r from-green-600 to-teal-500",
       };
     }
@@ -76,7 +79,8 @@ const Result = () => {
     if (followers > 50 && followers <= 500) {
       return {
         type: "Budding Developer",
-        description: "An emerging developer with potential for significant growth.",
+        description:
+          "An emerging developer with potential for significant growth.",
         color: "bg-gradient-to-r from-indigo-600 to-pink-500",
       };
     }
@@ -88,7 +92,8 @@ const Result = () => {
     ) {
       return {
         type: "Community Builder",
-        description: "Passionate about collaborative development and knowledge sharing.",
+        description:
+          "Passionate about collaborative development and knowledge sharing.",
         color: "bg-gradient-to-r from-green-600 to-teal-500",
       };
     }
@@ -96,7 +101,8 @@ const Result = () => {
     if (public_repos > 50 && totalStars > 500) {
       return {
         type: "Prolific Creator",
-        description: "A consistently productive developer with a diverse and impactful portfolio.",
+        description:
+          "A consistently productive developer with a diverse and impactful portfolio.",
         color: "bg-gradient-to-r from-indigo-600 to-pink-500",
       };
     }
@@ -104,14 +110,16 @@ const Result = () => {
     if (forkRatio > 0.5) {
       return {
         type: "Collaborative Innovator",
-        description: "Skilled at building upon and improving existing projects.",
+        description:
+          "Skilled at building upon and improving existing projects.",
         color: "bg-gradient-to-r from-yellow-600 to-orange-500",
       };
     }
 
     return {
       type: "Aspiring Developer",
-      description: "A developer at the beginning of their journey, ready to learn and grow.",
+      description:
+        "A developer at the beginning of their journey, ready to learn and grow.",
       color: "bg-gradient-to-r from-gray-500 to-black-500",
     };
   };
@@ -135,35 +143,34 @@ const Result = () => {
   //   if (profileCardRef.current) {
   //     try {
   //       toast.loading("Generating image...");
-  
+
   //       const canvas = await html2canvas(profileCardRef.current, {
   //         scale: 2,
   //         useCORS: true,
-  //         backgroundColor: "#fff", 
+  //         backgroundColor: "#fff",
   //         logging: false,
   //         windowWidth: profileCardRef.current.scrollWidth,
   //         windowHeight: profileCardRef.current.scrollHeight,
   //         allowTaint: true,
   //       });
-  
+
   //       const tempCanvas = document.createElement("canvas");
   //       const ctx = tempCanvas.getContext("2d");
   //       const padding = 40;
-        
+
   //       tempCanvas.width = canvas.width + padding * 2;
   //       tempCanvas.height = canvas.height + padding * 2;
-        
+
   //       ctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height); // Clear any previous fill
   //       ctx.fillStyle = "white"; // Add background fill if needed
   //       ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
   //       ctx.drawImage(canvas, padding, padding);
-        
-  
+
   //       const link = document.createElement("a");
   //       link.download = `${username}_github_aura.png`;
   //       link.href = tempCanvas.toDataURL("image/png");
   //       link.click();
-  
+
   //       toast.dismiss();
   //       toast.success("Profile image downloaded successfully!");
   //     } catch (error) {
@@ -172,15 +179,14 @@ const Result = () => {
   //     }
   //   }
   // };
-  
 
   const shareOnTwitter = () => {
     if (profile) {
       const auraPoints = calculateAuraPoints(profile, repos);
       const text = encodeURIComponent(
         `🚀 Just discovered my GitHub Aura! I'm a ${profile.aura.type} 🌟 with 🏅 ${auraPoints} Aura Points!\n\n` +
-        `Discover your GitHub Aura at: https://github-aura-analyzer.vercel.app/\n\n` +
-        `#GitHubAura #DeveloperProfile`
+          `Discover your GitHub Aura at: https://github-aura-analyzer.vercel.app/\n\n` +
+          `#GitHubAura #DeveloperProfile`
       );
       const url = `https://twitter.com/intent/tweet?text=${text}`;
       window.open(url, "_blank");
@@ -363,8 +369,9 @@ const Result = () => {
                 className="w-32 h-32 rounded-full border-4 border-purple-500/70 shadow-2xl mx-auto transform transition-transform"
               />
               <div className="absolute bottom-0 right-1/2 translate-x-1/2 translate-y-1/2">
-                <Badge className="bg-yellow-500 text-white px-5 py-2 rounded-full text-sm shadow-lg transform transition-transform">
-                  <Award className="mr-2 w-5 h-5" /> {auraPoints} Aura Points
+                <Badge className="bg-yellow-500 text-white px-4 py-2 rounded-full text-xs shadow-lg transform transition-transform flex items-center justify-center space-x-2 sm:px-5 sm:py-3 sm:text-sm">
+                  <Award className="mr-2 w-4 h-4 sm:w-5 sm:h-5" /> {auraPoints}{" "}
+                  Aura Points
                 </Badge>
               </div>
             </div>
@@ -388,51 +395,51 @@ const Result = () => {
             </Badge>
           </CardHeader>
 
-      <CardContent className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-    {[
-      {
-        icon: <Users className="w-5 h-5 text-purple-400" />,
-        label: "Followers",
-        value: profile?.followers,
-      },
-      {
-        icon: <BookOpen className="w-5 h-5 text-purple-400" />,
-        label: "Repositories",
-        value: profile?.public_repos,
-      },
-      {
-        icon: <Star className="w-5 h-5 text-yellow-400" />,
-        label: "Total Stars",
-        value: totalStars,
-      },
-    ].map((stat, index) => (
-      <div
-        key={index}
-        className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-purple-500/20 hover:border-purple-500/50 transition-all cursor-pointer"
-      >
-        <div className="flex items-center justify-center mb-2">
-          {stat.icon}
-        </div>
-        <div className="text-2xl font-bold text-white text-center">
-          {stat.value?.toLocaleString()}
-        </div>
-        <div className="text-sm text-gray-400 text-center">
-          {stat.label}
-        </div>
-      </div>
-    ))}
-  </div>
+          <CardContent className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  icon: <Users className="w-5 h-5 text-purple-400" />,
+                  label: "Followers",
+                  value: profile?.followers,
+                },
+                {
+                  icon: <BookOpen className="w-5 h-5 text-purple-400" />,
+                  label: "Repositories",
+                  value: profile?.public_repos,
+                },
+                {
+                  icon: <Star className="w-5 h-5 text-yellow-400" />,
+                  label: "Total Stars",
+                  value: totalStars,
+                },
+              ].map((stat, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-xl border border-purple-500/20 hover:border-purple-500/50 transition-all cursor-pointer"
+                >
+                  <div className="flex items-center justify-center mb-2">
+                    {stat.icon}
+                  </div>
+                  <div className="text-2xl font-bold text-white text-center">
+                    {stat.value?.toLocaleString()}
+                  </div>
+                  <div className="text-sm text-gray-400 text-center">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-  <Card className="bg-gray-800/60 backdrop-blur-sm border border-purple-500/30 rounded-xl hover:border-purple-500/50 cursor-pointer">
-    <CardContent className="p-6">
-      <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500 mb-3">
-        Aura Analysis
-      </h3>
-      <p className="text-gray-300 mb-4">
-        {profile?.aura?.description}
-      </p>
-{/*       
+            <Card className="bg-gray-800/60 backdrop-blur-sm border border-purple-500/30 rounded-xl hover:border-purple-500/50 cursor-pointer">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500 mb-3">
+                  Aura Analysis
+                </h3>
+                <p className="text-gray-300 mb-4">
+                  {profile?.aura?.description}
+                </p>
+                {/*       
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-gray-700/50 p-3 rounded-lg">
           <div className="text-sm text-gray-400">Total Contributions</div>
@@ -447,9 +454,9 @@ const Result = () => {
           </div>
         </div>
       </div> */}
-    </CardContent>
-  </Card>
-</CardContent>
+              </CardContent>
+            </Card>
+          </CardContent>
         </Card>
       </div>
     </div>
