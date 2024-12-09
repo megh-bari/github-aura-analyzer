@@ -276,8 +276,8 @@ const calculateAuraPoints = (profile, repos) => {
   // Apply category-specific multiplier
   points *= pointMultiplier;
 
-  // Ensure points are capped at 1500 for ultimate scalability
-  return Math.min(Math.round(points), 1500);
+  // Ensure points are capped at 10,000
+  return Math.min(Math.round(points), 10_000);
 };
 
 
