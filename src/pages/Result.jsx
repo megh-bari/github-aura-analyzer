@@ -33,111 +33,270 @@ const Result = () => {
   const [totalStars, setTotalStars] = useState(0);
   const profileCardRef = useRef(null);
 
-  const determineAura = (profile, repos) => {
-    const { followers, public_repos, bio } = profile;
-    const totalStars = repos.reduce(
-      (sum, repo) => sum + repo.stargazers_count,
-      0
-    );
-    const forkRatio = repos.filter((repo) => repo.fork).length / repos.length;
+  // const determineAura = (profile, repos) => {
+  //   const { followers, public_repos, bio } = profile;
+  //   const totalStars = repos.reduce(
+  //     (sum, repo) => sum + repo.stargazers_count,
+  //     0
+  //   );
+  //   const forkRatio = repos.filter((repo) => repo.fork).length / repos.length;
 
-    if (followers > 10000 && totalStars > 5000) {
-      return {
-        type: "Global Tech Icon",
-        description:
-          "An unparalleled leader in the tech world with immense influence.",
-        color: "bg-gradient-to-r from-red-600 to-yellow-600",
-      };
-    }
+  //   if (followers > 10000 && totalStars > 5000) {
+  //     return {
+  //       type: "Global Tech Icon",
+  //       description:
+  //         "An unparalleled leader in the tech world with immense influence.",
+  //       color: "bg-gradient-to-r from-red-600 to-yellow-600",
+  //     };
+  //   }
 
-    if (followers > 5000 && totalStars > 1000) {
-      return {
-        type: "Tech Influencer",
-        description:
-          "A highly recognized developer with massive community impact and thought leadership.",
-        color: "bg-gradient-to-r from-blue-600 to-purple-600",
-      };
-    }
+  //   if (followers > 5000 && totalStars > 1000) {
+  //     return {
+  //       type: "Tech Influencer",
+  //       description:
+  //         "A highly recognized developer with massive community impact and thought leadership.",
+  //       color: "bg-gradient-to-r from-blue-600 to-purple-600",
+  //     };
+  //   }
 
-    if (followers > 1000 && totalStars > 500) {
-      return {
-        type: "Rising Star",
-        description: "A rapidly growing developer with increasing influence.",
-        color: "bg-gradient-to-r from-orange-600 to-red-600",
-      };
-    }
+  //   if (followers > 1000 && totalStars > 500) {
+  //     return {
+  //       type: "Rising Star",
+  //       description: "A rapidly growing developer with increasing influence.",
+  //       color: "bg-gradient-to-r from-orange-600 to-red-600",
+  //     };
+  //   }
 
-    if (followers > 500 && followers <= 1000) {
-      return {
-        type: "Growing Contributor",
-        description:
-          "A developer with a growing impact and a steadily increasing follower base.",
-        color: "bg-gradient-to-r from-green-600 to-teal-500",
-      };
-    }
+  //   if (followers > 500 && followers <= 1000) {
+  //     return {
+  //       type: "Growing Contributor",
+  //       description:
+  //         "A developer with a growing impact and a steadily increasing follower base.",
+  //       color: "bg-gradient-to-r from-green-600 to-teal-500",
+  //     };
+  //   }
 
-    if (followers > 50 && followers <= 500) {
-      return {
-        type: "Budding Developer",
-        description:
-          "An emerging developer with potential for significant growth.",
-        color: "bg-gradient-to-r from-indigo-600 to-pink-500",
-      };
-    }
+  //   if (followers > 50 && followers <= 500) {
+  //     return {
+  //       type: "Budding Developer",
+  //       description:
+  //         "An emerging developer with potential for significant growth.",
+  //       color: "bg-gradient-to-r from-indigo-600 to-pink-500",
+  //     };
+  //   }
 
-    if (
-      bio &&
-      (bio.toLowerCase().includes("open source") ||
-        bio.toLowerCase().includes("contributor"))
-    ) {
-      return {
-        type: "Community Builder",
-        description:
-          "Passionate about collaborative development and knowledge sharing.",
-        color: "bg-gradient-to-r from-green-600 to-teal-500",
-      };
-    }
+  //   if (
+  //     bio &&
+  //     (bio.toLowerCase().includes("open source") ||
+  //       bio.toLowerCase().includes("contributor"))
+  //   ) {
+  //     return {
+  //       type: "Community Builder",
+  //       description:
+  //         "Passionate about collaborative development and knowledge sharing.",
+  //       color: "bg-gradient-to-r from-green-600 to-teal-500",
+  //     };
+  //   }
 
-    if (public_repos > 50 && totalStars > 500) {
-      return {
-        type: "Prolific Creator",
-        description:
-          "A consistently productive developer with a diverse and impactful portfolio.",
-        color: "bg-gradient-to-r from-indigo-600 to-pink-500",
-      };
-    }
+  //   if (public_repos > 50 && totalStars > 500) {
+  //     return {
+  //       type: "Prolific Creator",
+  //       description:
+  //         "A consistently productive developer with a diverse and impactful portfolio.",
+  //       color: "bg-gradient-to-r from-indigo-600 to-pink-500",
+  //     };
+  //   }
 
-    if (forkRatio > 0.5) {
-      return {
-        type: "Collaborative Innovator",
-        description:
-          "Skilled at building upon and improving existing projects.",
-        color: "bg-gradient-to-r from-yellow-600 to-orange-500",
-      };
-    }
+  //   if (forkRatio > 0.5) {
+  //     return {
+  //       type: "Collaborative Innovator",
+  //       description:
+  //         "Skilled at building upon and improving existing projects.",
+  //       color: "bg-gradient-to-r from-yellow-600 to-orange-500",
+  //     };
+  //   }
 
-    return {
+  //   return {
+  //     type: "Aspiring Developer",
+  //     description:
+  //       "A developer at the beginning of their journey, ready to learn and grow.",
+  //     color: "bg-gradient-to-r from-gray-500 to-black-500",
+  //   };
+  // };
+
+  // const calculateAuraPoints = (profile, repos) => {
+  //   const { followers, public_repos } = profile;
+  //   const totalStars = repos.reduce(
+  //     (sum, repo) => sum + repo.stargazers_count,
+  //     0
+  //   );
+
+  //   let points = 0;
+  //   points += Math.min(followers, 5000) / 50;
+  //   points += totalStars;
+  //   points += public_repos * 2;
+
+  //   return Math.min(Math.round(points), 1000);
+  // };
+
+// new
+const determineAura = (profile, repos) => {
+  const { followers, public_repos, bio } = profile;
+  const totalStars = repos.reduce(
+    (sum, repo) => sum + repo.stargazers_count,
+    0
+  );
+  const forkRatio = repos.filter((repo) => repo.fork).length / repos.length;
+
+  // Comprehensive Aura Categorization
+  const auraCategories = [
+    {
+      range: { min: 1_000_000, max: Infinity },
+      type: "Global Tech Titan",
+      description: "A legendary developer with massive global influence and unprecedented impact.",
+      color: "bg-gradient-to-r from-red-800 to-yellow-800",
+      pointMultiplier: 1.5
+    },
+    {
+      range: { min: 200_000, max: 1_000_000 },
+      type: "Tech Visionary",
+      description: "An extraordinary developer shaping the future of technology with groundbreaking contributions.",
+      color: "bg-gradient-to-r from-purple-800 to-indigo-800",
+      pointMultiplier: 1.3
+    },
+    {
+      range: { min: 100_000, max: 200_000 },
+      type: "Thought Leader",
+      description: "A highly influential developer with significant industry recognition and impact.",
+      color: "bg-gradient-to-r from-blue-800 to-purple-800",
+      pointMultiplier: 1.2
+    },
+    {
+      range: { min: 50_000, max: 100_000 },
+      type: "Tech Luminary",
+      description: "A prominent developer with substantial community influence and innovative contributions.",
+      color: "bg-gradient-to-r from-green-800 to-blue-800",
+      pointMultiplier: 1.1
+    },
+    {
+      range: { min: 20_000, max: 50_000 },
+      type: "Influential Innovator",
+      description: "A recognized developer with significant contributions and growing community impact.",
+      color: "bg-gradient-to-r from-orange-800 to-red-800",
+      pointMultiplier: 1.0
+    },
+    {
+      range: { min: 10_000, max: 20_000 },
+      type: "Rising Influencer",
+      description: "An emerging developer with substantial potential and increasing community recognition.",
+      color: "bg-gradient-to-r from-yellow-700 to-orange-700",
+      pointMultiplier: 0.9
+    },
+    {
+      range: { min: 5_000, max: 10_000 },
+      type: "Tech Innovator",
+      description: "A passionate developer making significant strides in their technological journey.",
+      color: "bg-gradient-to-r from-teal-700 to-green-700",
+      pointMultiplier: 0.8
+    },
+    {
+      range: { min: 1_000, max: 5_000 },
+      type: "Growing Contributor",
+      description: "A dedicated developer with increasing impact and community engagement.",
+      color: "bg-gradient-to-r from-indigo-700 to-purple-700",
+      pointMultiplier: 0.7
+    },
+    {
+      range: { min: 500, max: 1_000 },
+      type: "Emerging Talent",
+      description: "A promising developer building their reputation and expanding their skills.",
+      color: "bg-gradient-to-r from-pink-700 to-red-700",
+      pointMultiplier: 0.6
+    },
+    {
+      range: { min: 100, max: 500 },
+      type: "Budding Developer",
+      description: "An enthusiastic developer starting to make their mark in the tech community.",
+      color: "bg-gradient-to-r from-green-700 to-teal-700",
+      pointMultiplier: 0.5
+    },
+    {
+      range: { min: 0, max: 100 },
       type: "Aspiring Developer",
-      description:
-        "A developer at the beginning of their journey, ready to learn and grow.",
-      color: "bg-gradient-to-r from-gray-500 to-black-500",
+      description: "A passionate beginner taking their first steps in the world of technology.",
+      color: "bg-gradient-to-r from-gray-700 to-black",
+      pointMultiplier: 0.4
+    }
+  ];
+
+  // Special case for open-source and community contributors
+  if (
+    bio &&
+    (bio.toLowerCase().includes("open source") ||
+     bio.toLowerCase().includes("contributor"))
+  ) {
+    return {
+      type: "Community Builder",
+      description: "Passionate about collaborative development and knowledge sharing.",
+      color: "bg-gradient-to-r from-green-600 to-teal-500",
+      pointMultiplier: 0.7
     };
-  };
+  }
 
-  const calculateAuraPoints = (profile, repos) => {
-    const { followers, public_repos } = profile;
-    const totalStars = repos.reduce(
-      (sum, repo) => sum + repo.stargazers_count,
-      0
-    );
+  // Find the appropriate aura category based on followers
+  const matchedCategory = auraCategories.find(
+    category => 
+      followers >= category.range.min && 
+      followers < category.range.max
+  ) || auraCategories[auraCategories.length - 1];
 
-    let points = 0;
-    points += Math.min(followers, 5000) / 50;
-    points += totalStars;
-    points += public_repos * 2;
+  return matchedCategory;
+};
 
-    return Math.min(Math.round(points), 1000);
-  };
+const calculateAuraPoints = (profile, repos) => {
+  const { followers, public_repos } = profile;
+  const totalStars = repos.reduce(
+    (sum, repo) => sum + repo.stargazers_count,
+    0
+  );
+
+  const auraCategory = determineAura(profile, repos);
+  const pointMultiplier = auraCategory.pointMultiplier || 1;
+
+  let points = 0;
+  // Follower points with more nuanced scaling
+  points += Math.min(followers, 1_000_000) / 25; 
+  
+  // Stars points
+  points += totalStars * 1.5;
+  
+  // Repository points
+  points += public_repos * 3;
+
+  // Apply category-specific multiplier
+  points *= pointMultiplier;
+
+  // Ensure points are capped at 1500 for ultimate scalability
+  return Math.min(Math.round(points), 1500);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // const downloadProfileImage = async () => {
   //   if (profileCardRef.current) {
