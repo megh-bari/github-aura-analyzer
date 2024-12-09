@@ -179,7 +179,7 @@ const Result = () => {
       const auraPoints = calculateAuraPoints(profile, repos);
       const text = encodeURIComponent(
         `🚀 Just discovered my GitHub Aura! I'm a ${profile.aura.type} 🌟 with 🏅 ${auraPoints} Aura Points!\n\n` +
-        `Discover your GitHub Aura at: https://github-aura-analyzer.com\n\n` +
+        `Discover your GitHub Aura at: https://github-aura-analyzer.vercel.app/\n\n` +
         `#GitHubAura #DeveloperProfile`
       );
       const url = `https://twitter.com/intent/tweet?text=${text}`;
