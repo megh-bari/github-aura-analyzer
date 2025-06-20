@@ -79,7 +79,7 @@ const Home = () => {
           </div>
           <div className="z-10">
             <a
-              href="https://twitter.com/megh_bari"
+              href="https://twitter.com/meghtrix"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center space-x-2 sm:space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-3 sm:px-4 py-2 sm:py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-base sm:text-base"
